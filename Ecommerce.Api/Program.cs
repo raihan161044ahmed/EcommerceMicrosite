@@ -20,6 +20,11 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Assem
 builder.Services.AddValidatorsFromAssembly(typeof(AssemblyMarker).Assembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Ecommerce.Application.AssemblyMarker).Assembly));
+builder.Services.AddValidatorsFromAssembly(typeof(Ecommerce.Application.AssemblyMarker).Assembly);
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Ecommerce.Application.Behaviors.ValidationBehavior<,>));
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
