@@ -24,3 +24,4 @@ namespace Ecommerce.Application.Orders.Commands.Handlers
         }
     }
 }
+
