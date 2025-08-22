@@ -3,10 +3,16 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Orders.Commands
 {
-    public record CreateOrderCommand(Guid CustomerId, string ShippingStreet, string ShippingCity, string ShippingState, string ShippingZipCode, List<OrderItemDto> Items)
-        : IRequest<Guid>;
+    public record CreateOrderCommand(
+           Guid CustomerId,
+           string ShippingStreet,
+           string ShippingCity,
+           string ShippingState,
+           string ShippingZipCode,
+           List<OrderItemDto> Items
+       ) : IRequest<Guid>;
 
-    public record CancelOrderCommand(Guid OrderId) : IRequest;
+    public record CancelOrderCommand(Guid OrderId) : IRequest<Unit>;
 }
 
 namespace Ecommerce.Application.Orders.Commands.Handlers
@@ -23,5 +29,18 @@ namespace Ecommerce.Application.Orders.Commands.Handlers
             return await _repo.CreateAsync(dto, ct);
         }
     }
+
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Unit>
+    {
+        private readonly IOrderRepository _repo;
+        public CancelOrderCommandHandler(IOrderRepository repo) => _repo = repo;
+
+        public async Task<Unit> Handle(CancelOrderCommand request, CancellationToken ct)
+        {
+            await _repo.CancelAsync(request.OrderId, ct);
+            return Unit.Value;
+        }
+    }
+
 }
 
